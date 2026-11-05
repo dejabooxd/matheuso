@@ -1,0 +1,32 @@
+MATHEUSO — site em HTML (responsivo fluido)
+
+COMO ABRIR NO COMPUTADOR
+1. Extraia o zip.
+2. Dê dois cliques em index.html (funciona direto, sem servidor).
+
+COMO PUBLICAR
+Veja o tutorial (GitHub Pages + domínio matheuso.com). Resumo:
+- Suba TODO o conteúdo desta pasta (não o zip) para um repositório do GitHub.
+- Settings > Pages > Deploy from a branch > main / (root).
+- Só depois do teste, em Custom domain, digite matheuso.com (o GitHub cria o arquivo CNAME sozinho).
+- O arquivo .nojekyll (vazio) é opcional: ele só avisa o GitHub para não processar o site.
+
+FUNCIONAMENTO
+- Layout fluido: sem breakpoints do Figma. Texto, margens e imagens se ajustam continuamente à largura.
+- Home: tela fixa (sem rolagem da página); só a aba dos projetos rola.
+- Barra do topo e rodapé: letreiro animado. O menu (work, stuff, a.r., about) fica estático.
+- Caixa alta: barras vermelhas, "projeto" e "ficha técnica". Cargos em CAIXA ALTA + negrito; nomes só em caixa alta.
+- Cantos arredondados em todas as imagens (um único raio, em --r no site.css).
+- Animações ficam ligadas mesmo com "efeitos de animação" desativados no Windows.
+- Vídeos: autoplay, loop e sem som.
+- Emoji de troféu (Luzi) só aparece em aparelhos que o suportam.
+
+PRECISA DE INTERNET
+- Vídeos do Vimeo (páginas de projeto e a.r.).
+- Player do iPod (Last.fm), na página about.
+
+ARQUIVOS
+- index.html, site.css, app.js  -> código
+- data.js                       -> textos, créditos e ordem das imagens
+- assets/                       -> imagens, vídeos, fonte (Arimo) e favicon
+- player/                       -> player do iPod
