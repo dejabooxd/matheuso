@@ -67,8 +67,14 @@
   /* ------------------------------------------------------------ páginas (só o conteúdo de #view) */
   function project(key, cls){
     var p = D.pages[key];
-    return '<main class="page ' + (cls || '') + '"><section class="gal" aria-label="' + esc(p.t) + '">' +
-      p.rows.map(function(r){ return '<div class="row">' + r.map(cell).join('') + '</div>'; }).join('') +
+    /* abertura: título explicativo + parágrafo (p.intro) e legendas entre as linhas de peças (p.caps[i]) */
+    var intro = p.intro ? '<section class="intro"><h1 class="intro-h rv">' + esc(p.intro.h) + '</h1>' +
+      (p.intro.p ? '<p class="intro-p rv">' + esc(p.intro.p) + '</p>' : '') + '</section>' : '';
+    var caps = p.caps || [];
+    return '<main class="page ' + (cls || '') + '">' + intro + '<section class="gal" aria-label="' + esc(p.t) + '">' +
+      p.rows.map(function(r, i){
+        return (caps[i] ? '<p class="cap rv">' + esc(caps[i]) + '</p>' : '') + '<div class="row">' + r.map(cell).join('') + '</div>';
+      }).join('') +
       '</section>' + credits(p.cr) + '</main>';
   }
   function home(){
