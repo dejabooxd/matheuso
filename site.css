@@ -173,3 +173,10 @@ body.pg-home{overflow:hidden}
 .intro-h{margin:0 auto;max-width:min(100%,1500px);text-wrap:balance;font-weight:400;text-transform:uppercase;letter-spacing:-.05em;line-height:1;font-size:clamp(24px,10px + 3vw,46px)}
 .intro-p{margin:calc(var(--gap)*.9) auto 0;max-width:min(100%,150ch);text-wrap:balance;font-size:var(--fs-txt);line-height:1.25}
 .cap{margin:calc(var(--gap)*.6) auto 0;max-width:56ch;text-align:center;font-size:var(--fs-txt);line-height:1.25}
+
+/* seletor de idioma PT / EN (dentro do menu do topo): menor que os links, texto vermelho em caixa branca */
+.nav .lang{display:inline-flex;align-items:center;gap:.2em;white-space:nowrap;font-size:.72em;line-height:1;padding:.32em .6em;background:#fff;color:var(--red);border-radius:.45em;letter-spacing:-.04em}
+.nav .lang button{all:unset;cursor:pointer;font:inherit;letter-spacing:inherit;text-transform:inherit;opacity:.5;text-decoration:none}
+.nav .lang button:hover{opacity:1}
+.nav .lang button[aria-pressed="true"]{opacity:1;cursor:default;text-decoration:underline;text-underline-offset:.15em}
+.nav .lang button:focus-visible{outline:2px solid var(--red);outline-offset:2px;border-radius:2px}
