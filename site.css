@@ -167,3 +167,9 @@ body.pg-home{overflow:hidden}
 @container (min-width:390px){
   .nw{white-space:nowrap;font-size:max(15px,min(1em,3.85cqw))}
 }
+
+/* abertura explicativa dos projetos + legendas entre as peças */
+.intro{padding:calc(var(--gap)*1.6) var(--pad) 0;text-align:center}
+.intro-h{margin:0 auto;max-width:min(100%,1500px);text-wrap:balance;font-weight:400;text-transform:uppercase;letter-spacing:-.05em;line-height:1;font-size:clamp(24px,10px + 3vw,46px)}
+.intro-p{margin:calc(var(--gap)*.9) auto 0;max-width:min(100%,150ch);text-wrap:balance;font-size:var(--fs-txt);line-height:1.25}
+.cap{margin:calc(var(--gap)*.6) auto 0;max-width:56ch;text-align:center;font-size:var(--fs-txt);line-height:1.25}
