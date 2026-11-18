@@ -5,6 +5,16 @@
   var ioLoad = null, ioPlay = null, ioRv = null, ioBr = null, brRaf = 0, mqTimer = null, fitTimer = null;
   var ROOT = document.documentElement;
   var SITE = 'Matheuso ✦ Sr. Art Director';
+  /* idioma (PT / EN): o padrão é PT; a escolha fica salva no navegador. O inglês vem de i18n.js */
+  var EN = window.I18N || null, LANG = 'pt';
+  try { var sv = localStorage.getItem('lang'); if (EN && (sv === 'en' || sv === 'pt')) LANG = sv; } catch (e) {}
+  function isEn(){ return LANG === 'en' && !!EN; }
+  document.documentElement.lang = isEn() ? 'en' : 'pt-BR';
+  function rx(s){ return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+  function roles(html){
+    EN.roles.forEach(function(r){ html = html.replace(new RegExp(rx(r[0]), 'gi'), r[1]); });
+    return html;
+  }
   /* troféu 🏆 só aparece se o aparelho desenhar o emoji em cor (senão ficaria um quadradinho) */
   (function(){
     try {
@@ -28,7 +38,10 @@
   /* ------------------------------------------------------------ barras (persistentes: não reiniciam ao trocar de página) */
   function top(){
     var nav = D.nav.map(function(n){ return '<a href="' + n[1] + '">' + n[0] + '</a>'; }).join('');
-    return '<header class="top"><div class="top-in"><div class="mq" aria-hidden="true"><div class="lp" data-mq="loop"><div class="lp-g"><span>' + D.unit + '</span></div></div></div><nav class="nav" aria-label="principal">' + nav + '</nav></div></header>';
+    var sw = EN ? '<span class="lang" role="group" aria-label="Idioma / Language">' +
+      '<button type="button" data-lang="pt" lang="pt" aria-pressed="' + (!isEn()) + '">PT</button><span aria-hidden="true">/</span>' +
+      '<button type="button" data-lang="en" lang="en" aria-pressed="' + isEn() + '">EN</button></span>' : '';
+    return '<header class="top"><div class="top-in"><div class="mq" aria-hidden="true"><div class="lp" data-mq="loop"><div class="lp-g"><span>' + D.unit + '</span></div></div></div><nav class="nav" aria-label="principal">' + nav + sw + '</nav></div></header>';
   }
   function foot(){
     return '<footer class="foot" aria-hidden="true"><div class="lp" data-mq="loop"><div class="lp-g"><span>' + D.unit + '</span></div></div></footer>';
@@ -58,7 +71,7 @@
   }
   function credits(cr){
     return '<section class="cred"><div class="cred-g">' + cr.map(function(s){
-      return '<div class="sec rv' + (/^(projeto|ficha t[eé]cnica)$/i.test(s.l.trim()) ? ' caps' : '') + '"><div class="sec-l">' + s.l + '</div>' + s.p.map(function(p){
+      return '<div class="sec rv' + (/^(projeto|ficha t[eé]cnica|project|credits)$/i.test(s.l.trim()) ? ' caps' : '') + '"><div class="sec-l">' + s.l + '</div>' + s.p.map(function(p){
         return '<p class="t' + (p.b ? ' b' : '') + (p.u ? ' u' : '') + (p.j ? ' j' : '') + '">' + p.h + '</p>';
       }).join('') + '</div>';
     }).join('') + '</div></section>';
@@ -66,16 +79,35 @@
 
   /* ------------------------------------------------------------ páginas (só o conteúdo de #view) */
   function project(key, cls){
-    var p = D.pages[key];
+    var p = D.pages[key], E = isEn() && EN.pages[key] ? EN.pages[key] : null;
     /* abertura: título explicativo + parágrafo (p.intro) e legendas entre as linhas de peças (p.caps[i]) */
-    var intro = p.intro ? '<section class="intro"><h1 class="intro-h rv">' + esc(p.intro.h) + '</h1>' +
-      (p.intro.p ? '<p class="intro-p rv">' + esc(p.intro.p) + '</p>' : '') + '</section>' : '';
-    var caps = p.caps || [];
+    var it = E ? E : p.intro;
+    var intro = it ? '<section class="intro"><h1 class="intro-h rv">' + esc(it.h) + '</h1>' +
+      (it.p ? '<p class="intro-p rv">' + esc(it.p) + '</p>' : '') + '</section>' : '';
+    var caps = (E ? E.caps : p.caps) || [];
     return '<main class="page ' + (cls || '') + '">' + intro + '<section class="gal" aria-label="' + esc(p.t) + '">' +
       p.rows.map(function(r, i){
         return (caps[i] ? '<p class="cap rv">' + esc(caps[i]) + '</p>' : '') + '<div class="row">' + r.map(cell).join('') + '</div>';
       }).join('') +
-      '</section>' + credits(p.cr) + '</main>';
+      '</section>' + credits(E ? creditsEn(p, E) : p.cr) + '</main>';
+  }
+  /* créditos em inglês: título do projeto, contexto (e ideia) vêm de i18n.js; a ficha técnica traduz só os cargos */
+  function creditsEn(p, E){
+    var L = EN.labels, out = [], ctx = false;
+    p.cr.forEach(function(s, i){
+      var l = s.l.trim().toLowerCase();
+      if (l === 'projeto') {
+        out.push({l: L.project, p: s.p.map(function(q, n){ return n === 0 && E.proj ? {b: q.b, u: q.u, j: q.j, h: E.proj} : q; })});
+      } else if (/^(contexto|context|insight)/.test(l)) {
+        if (ctx) return;
+        ctx = true;
+        out.push({l: L.context, p: [{j: true, h: E.ctx}]});
+        if (E.idea) out.push({l: L.idea, p: [{j: true, h: E.idea}]});
+      } else {
+        out.push({l: L.credits, p: s.p.map(function(q){ return {b: q.b, u: q.u, j: q.j, h: roles(q.h)}; })});
+      }
+    });
+    return out;
   }
   function home(){
     var H = D.home;
@@ -103,11 +135,14 @@
       return '<pre class="orn" aria-hidden="true" style="left:' + o.x + '%;top:' + o.y + '%;font-size:' + o.fs + 'cqw;line-height:' + (o.lh / o.fs).toFixed(3) + '">' + esc(o.t) + '</pre>';
     }).join('');
     /* o player do iPod fica SOBRE a parte baixa do retrato (área vazada): não ocupa linha própria e não gera quebra/rolagem extra */
+    /* PT: só o bio em português (o texto original traz PT e EN juntos); EN: tudo de i18n.js */
+    var left = isEn() ? EN.about.left : [A.left[0].split('<br><br>⟶ Graduated')[0], A.left[1], A.left[2]];
+    var exp = isEn() ? EN.about.exp : A.exp;
     return '<main class="page about"><div class="collage">' +
-      '<div class="col-l"><p class="ab-t bio rv">' + A.left[0] + '</p><p class="ab-t awd rv">' + A.left[1] + '</p><p class="ab-t form rv">' + A.left[2] + '</p></div>' +
+      '<div class="col-l"><p class="ab-t bio rv">' + left[0] + '</p><p class="ab-t awd rv">' + left[1] + '</p><p class="ab-t form rv">' + left[2] + '</p></div>' +
       '<figure class="portrait rv" style="--a:' + A.ar + '"><div class="pfig">' + img({s: A.img}, '') +
       '<div class="player"><iframe data-src="player/index.html" title="Player" allow="autoplay"></iframe></div></div>' + orn + '</figure>' +
-      '<div class="col-r"><p class="ab-t exp rv">' + A.exp + '</p>' +
+      '<div class="col-r"><p class="ab-t exp rv">' + exp + '</p>' +
       '<a class="li" href="' + esc(A.li.url) + '" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="' + A.li.svg + '" alt="" width="30"></a></div>' +
       '</div></main>';
   }
@@ -237,7 +272,7 @@
   }
 
   /* ------------------------------------------------------------ montagem / troca de página */
-  function mount(name){
+  function mount(name, keepScroll){
     var html, title, home_ = false;
     if (name === '') { html = home(); title = SITE; home_ = true; }
     else if (name === 'stuff') { html = stuff(); title = 'Stuff — ' + SITE; }
@@ -253,7 +288,7 @@
     var pane = view.querySelector('.pane');
     if (pane && paneTop) pane.scrollTop = paneTop;
     fitPlayer(); lazy(); brailleStart();
-    window.scrollTo(0, 0);
+    if (!keepScroll) window.scrollTo(0, 0);
     return true;
   }
 
@@ -306,6 +341,27 @@
       swapPlain(function(){ mount(next); });
     }
   }
+
+  /* ------------------------------------------------------------ troca de idioma (PT / EN) */
+  function setLang(l){
+    if (!EN || (l !== 'pt' && l !== 'en') || l === LANG) return;
+    LANG = l;
+    try { localStorage.setItem('lang', l); } catch (e) {}
+    document.documentElement.lang = l === 'en' ? 'en' : 'pt-BR';
+    [].forEach.call(app.querySelectorAll('[data-lang]'), function(b){
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-lang') === l));
+    });
+    var y = window.pageYOffset, pane = view.querySelector('.pane'), pt = pane ? pane.scrollTop : 0;
+    if (current !== null) {
+      mount(current, true);
+      window.scrollTo(0, y);
+      var np = view.querySelector('.pane'); if (np) np.scrollTop = pt;
+    }
+  }
+  app.addEventListener('click', function(e){
+    var b = e.target.closest ? e.target.closest('[data-lang]') : null;
+    if (b) setLang(b.getAttribute('data-lang'));
+  });
 
   /* ------------------------------------------------------------ início */
   app.innerHTML = top() + '<div id="view"></div>' + foot();
