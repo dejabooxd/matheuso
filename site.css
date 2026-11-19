@@ -115,9 +115,9 @@ body.pg-home{overflow:hidden}
 
 /* ---------------------------------------------------------------- about */
 .about{flex:1 0 auto;container:about / inline-size;overflow-x:clip;padding:clamp(16px,1vw + 8px,17px) var(--pad) 0}
-.collage{display:flex;flex-direction:column;gap:var(--gap);padding-bottom:calc(var(--gap)*1.8)}
+.collage{display:flex;flex-direction:column;gap:var(--gap);padding-bottom:0}
 .col-l,.col-r{display:contents}
-.portrait{position:relative;order:1;margin:0;aspect-ratio:var(--a);container-type:inline-size;width:100%;max-width:828px;margin-inline:auto}
+.portrait{position:relative;order:7;margin:0;aspect-ratio:var(--a);container-type:inline-size;width:100%;max-width:828px;margin-inline:auto}
 .pfig{position:absolute;inset:0;transform:scale(var(--pz,1));transform-origin:50% 100%}
 .pfig>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .orn{position:absolute;margin:0;white-space:pre;text-transform:uppercase;font-weight:400;pointer-events:none;font-family:Arimo,"Segoe UI Symbol","Apple Symbols","Noto Sans Symbols 2","DejaVu Sans",sans-serif}
@@ -157,7 +157,7 @@ body.pg-home{overflow:hidden}
 .badge{position:absolute;overflow:hidden;pointer-events:none}
 .badge img{position:absolute;max-width:none}
 @media (max-aspect-ratio:1/1){
-  .home .page{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}
+  .home .page{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);row-gap:0}
   .face{flex-direction:row;justify-content:flex-start;align-items:stretch;gap:clamp(12px,4vw,32px);height:clamp(150px,30dvh,420px)}
   .face .portrait-h{flex:none;height:100%}
 }
