@@ -533,8 +533,8 @@ body.menu-open{overflow:hidden}
 .nav a,.lbl,.kick,.pl-cap,.yt-l,.cl-a,.menu-ct a{font-variant-emoji:text}
 /* ============================================================== v2026-12i
    home: projetos numa coluna só; no celular o retrato encosta na área dos projetos (sem faixa branca) */
-.pane{grid-template-columns:minmax(0,1fr)}
 @media (max-aspect-ratio:1/1){
+  .pane{grid-template-columns:minmax(0,1fr)}   /* uma coluna só no celular; desktop como antes */
   .home .page{row-gap:0}
   .home .face{margin-bottom:0;padding-bottom:0}
   .home .face .portrait-h{align-items:flex-end}
@@ -572,3 +572,11 @@ body.menu-open{overflow:hidden}
   .pj .cap span:last-child{flex:1}
   .st-gal{grid-template-columns:repeat(2,minmax(0,1fr))}
 }@media (max-aspect-ratio:1/1){.home .foot{position:sticky;bottom:0;z-index:20}}  /* home no celular: letreiro sempre visível no rodapé enquanto a página rola */
+
+/* ============================================================== v2026-12l (só celular, home) */
+@media (max-aspect-ratio:1/1){
+  .home .face{position:relative}
+  .home .face .meta{position:absolute;z-index:2;top:clamp(14px,6vw,40px);right:0;max-width:52%;text-align:left}
+  .home .face .portrait-h{margin-bottom:-10px;position:relative;z-index:0}
+  .home .pane{position:relative;z-index:1}
+}
