@@ -58,12 +58,13 @@
   function cropStyle(c){ return ' style="left:' + c[0] + '%;top:' + c[1] + '%;width:' + c[2] + '%;height:' + c[3] + '%"'; }
   /* vídeos com som no YouTube: a peça mostra o quadro (poster) e só carrega o player ao clicar — leve e com áudio */
   var YT = {
-    micheltemluz: {r: 1, c: 0, id: '1kORePOQaLA'},
-    luzi: {r: 2, c: 0, id: 'p5QPOXfhfPA'}
+    micheltemluz: [{r: 1, c: 0, t: 'yt', id: '1kORePOQaLA'}, {r: 2, c: 1, t: 'ig', id: 'DMdzD9Tt_Rc'}, {r: 3, c: 0, t: 'yt', id: '0lKlEJoLrFo'}, {r: 4, c: 0, t: 'yt', id: 'Ne8hx15QQZg'}],
+    luzi: [{r: 2, c: 0, t: 'yt', id: 'p5QPOXfhfPA'}, {r: 4, c: 0, t: 'yt', id: 'MBTxOBqr6Sw'}],
+    braceletecash: [{r: 1, c: 0, t: 'ccv', id: 'RcXtsYKRKs6'}]   // vídeo do Behance (player da Adobe)
   };
-  function ytCell(c, id){
+  function ytCell(c, id, typ){
     var poster = c.p || c.s;
-    return '<div class="cell v yt rv" style="--a:' + c.a + '"><button type="button" class="yt-b" data-yt="' + id + '"' + (c.k === 'm' ? ' data-mp4="' + c.s + '"' : '') + ' aria-label="' + tr('Assistir ao vídeo com som', 'Watch the video with sound') + '">' +
+    return '<div class="cell v yt rv" style="--a:' + c.a + '"><button type="button" class="yt-b" data-t="' + (typ || 'yt') + '" data-yt="' + id + '"' + (c.k === 'm' ? ' data-mp4="' + c.s + '"' : '') + ' aria-label="' + tr('Assistir ao vídeo com som', 'Watch the video with sound') + '">' +
       '<img src="' + poster + '" alt="" loading="lazy" decoding="async"><span class="yt-p" aria-hidden="true">▶</span>' +
       '<span class="yt-l">' + tr('assistir com som', 'watch with sound') + ' ↗</span></button></div>';
   }
@@ -241,13 +242,14 @@
       (T.ft ? '<div class="ph-ftw"><p class="lbl">↘ ' + tr('Ficha técnica', 'Credits') + '</p>' + ftHtml(T.ft, key) + '</div>' : '') +
       '</section>';
     /* legendas curtas embaixo de cada linha de peças (pequenas, à esquerda) */
-    var yt = YT[key];
+    var yts = YT[key] || [];
     var gal = '<section class="gal" aria-label="' + esc(p.t) + '">' + p.rows.map(function(r, i){
       var cap = [];
       if (i === 0 && it && it.p) cap.push(it.p);
       if (caps[i]) cap.push(caps[i]);
       return '<div class="row">' + r.map(function(c, j){
-        if (yt && yt.r === i && yt.c === j) return ytCell(c, yt.id);
+        var yt = yts.filter(function(y){ return y.r === i && y.c === j; })[0];
+        if (yt) return ytCell(c, yt.id, yt.t);
         return cell(c, i === 0 && j === 0);
       }).join('') + '</div>' +
         (cap.length ? '<p class="cap rv"><span class="cap-n" aria-hidden="true">' + ('0' + (i + 1)).slice(-2) + '</span><span>' + cap.map(esc).join('<br>') + '</span></p>' : '');
@@ -329,14 +331,14 @@
       return m ? {y: m[1], n: m[2], c: m[3] ? [m[3]] : []} : {y: '', n: x, c: []};
     });
     return '<main class="page about"><div class="collage">' +
-      '<div class="col-l"><div class="pl-w"><p class="pl-cap">↘ ' + tr('últimos scrobbles', 'latest scrobbles') + ' · Last.fm</p>' +
-      '<div class="player pl-l"><iframe data-src="player/index.html" title="Player" allow="autoplay"></iframe></div></div>' +
-      '<p class="ab-t bio rv">' + left[0] + '</p>' + block('awd', aw.t, awRows) + block('form', fo.t, fo.items.map(dated)) + '</div>' +
+      '<div class="col-l"><p class="ab-t bio rv">' + left[0] + '</p>' + block('awd', aw.t, awRows) + block('form', fo.t, fo.items.map(dated)) + '</div>' +
       '<figure class="portrait rv" style="--a:' + A.ar + '"><div class="pfig">' + img({s: A.img}, '') + '</div>' + orn + '</figure>' +
       '<div class="col-r">' + block('exp', ex.t, ex.items.map(dated)) +
-      '<div class="ab-ct">' + '<a class="ab-ic" href="' + esc(A.li.url) + '" target="_blank" rel="noopener" aria-label="LinkedIn">' + ICO.LinkedIn + '</a>' +
+      '<div class="ab-end"><div class="ab-ct">' + '<a class="ab-ic" href="' + esc(A.li.url) + '" target="_blank" rel="noopener" aria-label="LinkedIn">' + ICO.LinkedIn + '</a>' +
         '<a class="ab-ic" href="https://wa.me/' + CT.wa + '" target="_blank" rel="noopener" aria-label="WhatsApp">' + ICO.WhatsApp + '</a>' +
-        '<a class="ab-ic" href="mailto:' + CT.mail + '" aria-label="E-mail">' + ICO['E-mail'] + '</a></div></div>' +
+        '<a class="ab-ic" href="mailto:' + CT.mail + '" aria-label="E-mail">' + ICO['E-mail'] + '</a></div>' +
+        '<div class="pl-w"><p class="pl-cap">↘ ' + tr('últimos scrobbles', 'latest scrobbles') + ' · Last.fm</p>' +
+        '<div class="player pl-l"><iframe data-src="player/index.html" title="Player" allow="autoplay"></iframe></div></div></div></div>' +
       '</div></main>';
   }  /* ------------------------------------------------------------ player do iPod: escala para caber sobre o retrato */
   function fitPlayer(){
@@ -352,8 +354,9 @@
     }
     p.style.setProperty('--pz', pz.toFixed(3));
     /* iPod no topo da coluna da esquerda: escala para a largura da coluna (356px é o tamanho natural) */
-    var cl = app.querySelector('.about .col-l'), pl = app.querySelector('.about .pl-l');
-    if (cl && pl) { var w = (grid ? cl.clientWidth : Math.min(cl.parentNode.clientWidth, 420)); pl.style.setProperty('--ps', Math.max(0.5, Math.min(grid ? Math.min(0.62, window.innerHeight / 1450) : 1, w / 356)).toFixed(3)); }
+    /* iPod no fim da coluna da direita, ao lado dos ícones de contato */
+    var cr = app.querySelector('.about .col-r'), pl = app.querySelector('.about .pl-l');
+    if (cr && pl) { var w = (grid ? cr.clientWidth : Math.min(cr.parentNode.clientWidth, 420)); pl.style.setProperty('--ps', Math.max(0.5, Math.min(grid ? Math.min(0.72, window.innerHeight / 1350) : 1, w / 356)).toFixed(3)); }
   }
 
   /* ------------------------------------------------------------ letreiros */
@@ -444,7 +447,8 @@
     var id = b.getAttribute('data-yt');
     /* aberto direto do arquivo (file://) o YouTube recusa o player embutido: abre o vídeo no YouTube */
     /* aberto direto do arquivo (file://) o YouTube recusa o player embutido: toca o próprio vídeo do site, com som, no mesmo lugar */
-    if (location.protocol === 'file:' && b.getAttribute('data-mp4')) {
+    var typ = b.getAttribute('data-t') || 'yt';
+    if (typ === 'yt' && location.protocol === 'file:' && b.getAttribute('data-mp4')) {
       var v = document.createElement('video');
       v.src = b.getAttribute('data-mp4'); v.controls = true; v.autoplay = true; v.playsInline = true;
       b.parentNode.replaceChild(v, b); var pp = v.play(); if (pp && pp.catch) pp.catch(function(){});
@@ -452,8 +456,10 @@
     }
     var f = document.createElement('iframe');
     f.referrerPolicy = 'strict-origin-when-cross-origin';
-    f.src = 'https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0&playsinline=1&origin=' + encodeURIComponent(location.origin);
-    f.title = 'YouTube';
+    f.src = typ === 'ig' ? 'https://www.instagram.com/reel/' + id + '/embed/'
+          : typ === 'ccv' ? 'https://www-ccv.adobe.io/v1/player/ccv/' + id + '/embed?api_key=behance1&bgcolor=%23000000&autoplay=true'
+          : 'https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0&playsinline=1&origin=' + encodeURIComponent(location.origin);
+    f.title = typ === 'ig' ? 'Instagram' : typ === 'ccv' ? 'Behance' : 'YouTube';
     f.allow = 'autoplay; encrypted-media; fullscreen; picture-in-picture';
     f.allowFullscreen = true;
     b.parentNode.replaceChild(f, b);
