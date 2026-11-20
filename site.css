@@ -549,3 +549,26 @@ body.menu-open{overflow:hidden}
 .ft{align-items:stretch!important;row-gap:0}
 .ft>div{display:flex;flex-direction:column;padding:8px 0 10px;border-bottom:1px solid var(--line)}
 .ft dt{min-height:1.3em}
+
+/* ============================================================== v2026-12j  (só celular; desktop não muda) */
+/* barra de cima no celular: sem letreiro; só ícone do menu, links e idioma numa linha */
+@container (max-width:640px){
+  .top .mq{display:none}
+  .top-in{flex-wrap:nowrap}
+}
+/* home no celular: a página inteira rola (sem caixinha de rolagem); retrato maior, centralizado, apoiado nos projetos */
+@media (max-aspect-ratio:1/1){
+  body.pg-home{overflow:auto}
+  .home{height:auto;min-height:100dvh;overflow:visible}
+  .home .page{display:flex;flex-direction:column;flex:1 0 auto;min-height:0;overflow:visible;padding-bottom:0}
+  .home .face{flex-direction:column;align-items:stretch;height:auto;gap:clamp(8px,2vw,16px)}
+  .home .face .portrait-h{flex:none;height:auto;display:flex;justify-content:center;align-items:flex-end}
+  .home .face .portrait-h img{width:min(100%,560px);height:auto;max-width:100%;object-position:center bottom}
+  .home .pane{overflow:visible;flex:none;border-top:0;padding-top:0;padding-bottom:clamp(12px,3vw,24px)}
+}
+/* ============================================================== v2026-12k (só celular) */
+@media (max-width:760px){
+  .pj .cap{max-width:none}
+  .pj .cap span:last-child{flex:1}
+  .st-gal{grid-template-columns:repeat(2,minmax(0,1fr))}
+}@media (max-aspect-ratio:1/1){.home .foot{position:sticky;bottom:0;z-index:20}}  /* home no celular: letreiro sempre visível no rodapé enquanto a página rola */
