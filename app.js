@@ -66,7 +66,7 @@
     var poster = c.p || c.s;
     return '<div class="cell v yt rv" style="--a:' + c.a + '"><button type="button" class="yt-b" data-t="' + (typ || 'yt') + '" data-yt="' + id + '"' + (c.k === 'm' ? ' data-mp4="' + c.s + '"' : '') + ' aria-label="' + tr('Assistir ao vídeo com som', 'Watch the video with sound') + '">' +
       '<img src="' + poster + '" alt="" loading="lazy" decoding="async"><span class="yt-p" aria-hidden="true">▶</span>' +
-      '<span class="yt-l">' + tr('assistir com som', 'watch with sound') + ' ↗</span></button></div>';
+      '<span class="yt-l">' + tr('assistir com som', 'watch with sound') + ' ⮕</span></button></div>';
   }
   function cell(c, eager){
     if (c.k === 'col') {
@@ -106,13 +106,13 @@
   }
   function contactList(cls){
     return '<ul class="cl ' + (cls || '') + '">' + contactItems().map(function(c){
-      return '<li><a href="' + esc(c[1]) + '"' + c[3] + '><span class="cl-k">' + c[0] + '</span><span class="cl-v">' + esc(c[2]) + '</span><span class="cl-a" aria-hidden="true">↗</span></a></li>';
+      return '<li><a href="' + esc(c[1]) + '"' + c[3] + '><span class="cl-k">' + c[0] + '</span><span class="cl-v">' + esc(c[2]) + '</span><span class="cl-a" aria-hidden="true">⮕</span></a></li>';
     }).join('') + '</ul>';
   }
   /* encerramento: o mesmo em todas as páginas internas (sem caixa; só linha fina, título e contatos) */
   function closing(id){
     return '<section class="close"' + (id ? ' id="' + id + '"' : '') + ' aria-labelledby="close-t"><div class="close-g">' +
-      '<div class="close-h"><p class="kick">↘ ' + tr('Contato', 'Contact') + '</p>' +
+      '<div class="close-h"><p class="kick">⮕ ' + tr('Contato', 'Contact') + '</p>' +
       '<h2 class="close-t" id="close-t">' + tr('Vamos<br>conversar?', 'Let’s<br>talk?') + '<span class="close-s" aria-hidden="true">✶</span></h2></div>' +
       contactList() + '</div></section>';
   }
@@ -234,12 +234,12 @@
       '<span>' + tr('Projeto', 'Project') + '</span>' +
       T.extra.map(function(x){ return '<span class="ph-aw">✦ ' + x + '</span>'; }).join('') + '</p>';
     var texts = T.texts.map(function(s){
-      return '<div class="ph-s"><p class="lbl">↘ ' + esc(s.l) + '</p><p class="ph-p">' + s.h + '</p></div>';
+      return '<div class="ph-s"><p class="lbl">⮕ ' + esc(s.l) + '</p><p class="ph-p">' + s.h + '</p></div>';
     }).join('');
     var hero = '<section class="ph">' + kick +
       '<div class="ph-g"><div class="ph-tw"><h1 class="ph-t">' + esc(T.name) + '</h1>' + badgeOf(key) + '</div>' +
       '<div class="ph-x">' + (it && it.h ? '<p class="ph-lead">' + esc(it.h) + '</p>' : '') + texts + '</div></div>' +
-      (T.ft ? '<div class="ph-ftw"><p class="lbl">↘ ' + tr('Ficha técnica', 'Credits') + '</p>' + ftHtml(T.ft, key) + '</div>' : '') +
+      (T.ft ? '<div class="ph-ftw"><p class="lbl">⮕ ' + tr('Ficha técnica', 'Credits') + '</p>' + ftHtml(T.ft, key) + '</div>' : '') +
       '</section>';
     /* legendas curtas embaixo de cada linha de peças (pequenas, à esquerda) */
     var yts = YT[key] || [];
@@ -316,7 +316,7 @@
     function client(x){ return x.replace(/^(principais clientes|principal cliente|main clients?)\s*:\s*/i, ''); }
     /* mesmo padrão em experiências, prêmios e formação: etiqueta pequena / nome grande / detalhe pequeno */
     function block(cls, title, rows){
-      return '<section class="xp ' + cls + ' rv"><p class="lbl">↘ ' + esc(title) + '</p><ul class="xp-l">' + rows.map(function(r){
+      return '<section class="xp ' + cls + ' rv"><p class="lbl">⮕ ' + esc(title) + '</p><ul class="xp-l">' + rows.map(function(r){
         return '<li' + (r.now ? ' class="now"' : '') + '><span class="xp-y">' + esc(r.y) + '</span><span class="xp-n">' + esc(r.n) + '</span>' +
           r.c.map(function(x){ return '<span class="xp-c">' + esc(x) + '</span>'; }).join('') + '</li>';
       }).join('') + '</ul></section>';
@@ -337,7 +337,7 @@
       '<div class="ab-end"><div class="ab-ct">' + '<a class="ab-ic" href="' + esc(A.li.url) + '" target="_blank" rel="noopener" aria-label="LinkedIn">' + ICO.LinkedIn + '</a>' +
         '<a class="ab-ic" href="https://wa.me/' + CT.wa + '" target="_blank" rel="noopener" aria-label="WhatsApp">' + ICO.WhatsApp + '</a>' +
         '<a class="ab-ic" href="mailto:' + CT.mail + '" aria-label="E-mail">' + ICO['E-mail'] + '</a></div>' +
-        '<div class="pl-w"><p class="pl-cap">↘ ' + tr('últimos scrobbles', 'latest scrobbles') + ' · Last.fm</p>' +
+        '<div class="pl-w"><p class="pl-cap">⮕ ' + tr('últimos scrobbles', 'latest scrobbles') + ' · Last.fm</p>' +
         '<div class="player pl-l"><iframe data-src="player/index.html" title="Player" allow="autoplay"></iframe></div></div></div></div>' +
       '</div></main>';
   }  /* ------------------------------------------------------------ player do iPod: escala para caber sobre o retrato */

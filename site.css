@@ -210,7 +210,7 @@ body.pg-home{overflow:hidden}
 .ft{margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:0 clamp(14px,1.8vw,28px);border-top:1px solid var(--red)}
 .ft>div{padding:6px 0;border-bottom:1px solid var(--line);min-width:0}
 .ft dt{font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--mute);margin-bottom:3px}
-.ft dt::before{content:"↘ ";color:var(--red)}
+.ft dt::before{content:"⮕ ";color:var(--red)}
 .ft dd,.ft dd *{text-transform:uppercase!important}.ft dd{margin:0;font-size:12px;letter-spacing:.01em;line-height:1.35;overflow-wrap:anywhere}
 .ft dd a{text-decoration:underline;text-underline-offset:.14em}
 .ft dd a:hover{color:var(--red)}
@@ -514,3 +514,38 @@ body.menu-open{overflow:hidden}
 .ab-end{flex-direction:column;align-items:flex-start;gap:clamp(10px,1.4vh,18px)}
 .ab-end .ab-ct{flex-direction:row;align-items:center}
 @container about (min-width:1000px){.col-r{justify-content:flex-start;gap:clamp(14px,2vh,26px)}}
+/* ============================================================== v2026-12h
+   celular: barra vermelha igual à do desktop (letreiro numa linha, ícone do menu + links + idioma na outra) */
+@container (max-width:640px){
+  .top-in{flex-wrap:wrap;row-gap:calc(var(--fs-bar)*.25);column-gap:calc(var(--fs-bar)*.8)}
+  .top .mq{display:block;order:-1;flex:1 0 100%}
+  .nav>a{display:inline}
+  .nav::before{display:none}
+  .nav{flex:1;justify-content:space-between}
+}
+/* celular: about com bio na largura toda e o retrato no fim, encostado no rodapé */
+@container about (max-width:999px){
+  .about .ab-t.bio{max-width:none}
+  .about .portrait{order:9}
+  .about .collage{padding-bottom:0}
+}
+.about{padding-bottom:0}/* setas ⮕ sempre como caractere (nunca emoji) */
+.nav a,.lbl,.kick,.pl-cap,.yt-l,.cl-a,.menu-ct a{font-variant-emoji:text}
+/* ============================================================== v2026-12i
+   home: projetos numa coluna só; no celular o retrato encosta na área dos projetos (sem faixa branca) */
+.pane{grid-template-columns:minmax(0,1fr)}
+@media (max-aspect-ratio:1/1){
+  .home .page{row-gap:0}
+  .home .face{margin-bottom:0;padding-bottom:0}
+  .home .face .portrait-h{align-items:flex-end}
+  .home .face .portrait-h img{object-position:right bottom;display:block}
+  .home .pane{padding-top:0;border-top:2px solid #000}
+}
+/* fichas técnicas: grade alinhada que sempre cabe na tela; cada nome numa linha, quebra só se faltar espaço */
+.ft{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(min(100%,190px),1fr));column-gap:clamp(14px,1.8vw,28px);align-items:start}
+.ft>div{min-width:0}
+.ft dt,.ft dd{white-space:normal;overflow-wrap:break-word}
+@media (max-width:640px){.ft{grid-template-columns:repeat(2,minmax(0,1fr))}}/* fichas técnicas: blocos da mesma linha com a mesma altura (linhas de baixo alinhadas), espaço regular entre linhas */
+.ft{align-items:stretch!important;row-gap:0}
+.ft>div{display:flex;flex-direction:column;padding:8px 0 10px;border-bottom:1px solid var(--line)}
+.ft dt{min-height:1.3em}
